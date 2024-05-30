@@ -5,6 +5,7 @@ import React, { useEffect, useRef, useState } from "react";
 import PlayPauseBtn from "@/components/PlayPauseBtn";
 import styles from "./VideoPlayer.module.css";
 import FullScreenBtn from "../FullScreenBtn";
+import Controls from "../Controls";
 
 const VideoPlayer = () => {
   const [isPaused, setIsPaused] = useState<boolean>(false);
@@ -57,16 +58,16 @@ const VideoPlayer = () => {
       if (e.key === "f") {
         console.log("Expanding or Collapsing");
         expandCollapseVideo();
-      } else if (e.key === "k") {
+      } else if (e.key === "k" || e.key === "space") {
         console.log("play or pause");
         togglePlayPause();
       } else if (e.key === "Escape") {
         if (isFullScreen) document.exitFullscreen().then(() => {});
       }
     };
-    document.addEventListener("keydown", listener);
+    document.addEventListener("keyup", listener);
 
-    return () => document.removeEventListener("keydown", listener);
+    return () => document.removeEventListener("keyup", listener);
   }, []);
 
   useEffect(() => {
@@ -79,20 +80,13 @@ const VideoPlayer = () => {
       }
     };
 
-    const intervalId = setInterval(updateCurrentTime, 200);
+    const intervalId = setInterval(updateCurrentTime, 100);
 
     return () => {
       clearInterval(intervalId);
     };
   }, [currVideoTime, videoDuration, isPaused]);
 
-  const formatTime = (time: number): string => {
-    let min: number = Math.floor(time / 60);
-    let sec: number = Math.floor(time % 60);
-    return `${min.toString().padStart(2, "0")} : ${sec
-      .toString()
-      .padStart(2, "0")}`;
-  };
   return (
     <div
       className={`${styles.videoContainer} ${
@@ -101,25 +95,16 @@ const VideoPlayer = () => {
       ref={contRef}
     >
       <video className={styles.video} ref={videoRef} autoPlay loop muted>
-        <source src="videos/ocean.mp4" type="video/mp4" />
+        <source src="/videos/ocean.mp4" type="video/mp4" />
       </video>
-      <div className={styles.videoControlsContainer}>
-        <div className={styles.videoTimeline}></div>
-        <div className={styles.controls}>
-          <div className={styles.leftControls}>
-            <PlayPauseBtn paused={isPaused} onPlayPause={togglePlayPause} />
-            <div>{`${formatTime(Math.round(currVideoTime))} / ${formatTime(
-              Math.round(videoDuration)
-            )}`}</div>
-          </div>
-          <div className={styles.rightControls}>
-            <FullScreenBtn
-              isFullScreen={isFullScreen}
-              onExpandCollapse={expandCollapseVideo}
-            />
-          </div>
-        </div>
-      </div>
+      <Controls
+        isPaused={isPaused}
+        isFullScreen={isFullScreen}
+        currVideoTime={currVideoTime}
+        leftVideoTime={videoDuration - currVideoTime}
+        onPlayPause={togglePlayPause}
+        onFullScreenCollapse={expandCollapseVideo}
+      />
     </div>
   );
 };
