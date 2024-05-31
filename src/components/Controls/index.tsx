@@ -1,12 +1,14 @@
+import { RefObject } from "react";
 import FullScreenBtn from "../FullScreenBtn";
 import PlayPauseBtn from "../PlayPauseBtn";
 import Timeline from "../Timeline";
 import styles from "../VideoPlayer/VideoPlayer.module.css";
 
 interface controlProps {
+  seekVideoTo: (time: number) => void;
+  show: boolean;
   currVideoTime: number;
   leftVideoTime: number; // remianing video time
-  show: boolean;
   isPaused: boolean;
   isFullScreen: boolean;
   onPlayPause: () => void;
@@ -14,6 +16,7 @@ interface controlProps {
 }
 
 const Controls = ({
+  seekVideoTo,
   show,
   isPaused,
   isFullScreen,
@@ -50,7 +53,7 @@ const Controls = ({
       <div className={styles.controls}>
         <PlayPauseBtn paused={isPaused} onPlayPause={onPlayPause} />
         <Time time={currVideoTime} />
-        <Timeline
+        <Timeline seekVideo={seekVideoTo}
           progressPercent={
             (currVideoTime / (currVideoTime + leftVideoTime)) * 100
           }

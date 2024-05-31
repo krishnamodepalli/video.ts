@@ -64,6 +64,15 @@ const VideoPlayer = () => {
     }, n * 1000);
   };
 
+  const seekVideoTo = (toPercent: number): void => {
+    const video = videoRef.current;
+    if (video) {
+      const time = toPercent * videoDuration;
+      video.currentTime = time;
+      setCurrVideoTime(time);
+    }
+  }
+
   useEffect(() => {
     const video = videoRef.current;
     if (video) {
@@ -81,8 +90,9 @@ const VideoPlayer = () => {
         showControlsFor(2);
       });
 
+      // TODO 1. Add m for mute
       const listener: (e: KeyboardEvent) => void = (e) => {
-        console.log(e.key);
+        console.log(typeof e.key);
         if (e.key === "f") {
           expandCollapseVideo();
         } else if ([" ", "k"].includes(e.key)) {
@@ -94,6 +104,8 @@ const VideoPlayer = () => {
           video.currentTime -= 5;
         } else if (e.key === "Escape") {
           if (isFullScreen) document.exitFullscreen().then(() => {});
+        } else if (e.key >= "0" && e.key <= "9") {
+          video.currentTime = (parseInt(e.key) * videoDuration) / 10;
         }
         showControlsFor(2);
         setCurrVideoTime(video.currentTime);
@@ -134,6 +146,7 @@ const VideoPlayer = () => {
         <source src="/videos/ocean.mp4" type="video/mp4" />
       </video>
       <Controls
+        seekVideoTo={seekVideoTo}
         show={showControls || isPaused}
         isPaused={isPaused}
         isFullScreen={isFullScreen}
