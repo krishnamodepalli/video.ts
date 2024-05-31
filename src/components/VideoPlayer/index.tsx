@@ -1,19 +1,27 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
-import PlayPauseBtn from "@/components/PlayPauseBtn";
 import styles from "./VideoPlayer.module.css";
-import FullScreenBtn from "../FullScreenBtn";
 import Controls from "../Controls";
 
 const VideoPlayer = () => {
-  const [isPaused, setIsPaused] = useState<boolean>(false);
+  const [showControls, setShowControls] = useState<boolean>(false);
+  const [isPaused, setIsPaused] = useState<boolean>(true);
   const [videoDuration, setVideoDuration] = useState<number>(0);
   const [currVideoTime, setCurrVideoTime] = useState<number>(0);
-  const videoRef = useRef<HTMLVideoElement | null>(null);
 
-  const contRef = React.createRef<HTMLDivElement>();
+  // refs
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const contRef = useRef<HTMLDivElement | null>(null);
+  const showControlsRef = useRef<NodeJS.Timeout>();
+  const fullScreenBtnRef = useRef<HTMLButtonElement | null>(null);
+
+  // mouse states
+  // const [isMouseLeft, setIsMouseLeft] = useState<boolean>(false);
+  // const [isMouseMoving, setIsMouseMoving] = useState<boolean>(false);
+  //+ REMOVED THESE STATES AND STILL DEVELOPING, WILL BE ADDED IF ANY BUGS FOUND
+
   const [isFullScreen, setIsFullScreen] = useState<boolean>(false);
 
   const togglePlayPause: () => void = () => {
@@ -33,12 +41,11 @@ const VideoPlayer = () => {
   };
 
   const expandCollapseVideo: () => void = () => {
-    console.log("expand run");
     const container = contRef.current;
-    let fs: boolean = isFullScreen;
+    console.log(isFullScreen);
     if (container) {
-      console.log("Container there");
-      if (fs) {
+      if (isFullScreen) {
+        console.log(document);
         document.exitFullscreen().then(() => setIsFullScreen(false));
         console.log("Full Screen exiting");
       } else {
@@ -48,27 +55,56 @@ const VideoPlayer = () => {
     }
   };
 
+  const showControlsFor = (n: number, callback?: () => void): void => {
+    setShowControls(true);
+    clearTimeout(showControlsRef.current);
+    showControlsRef.current = setTimeout(() => {
+      setShowControls(false);
+      if (callback) callback();
+    }, n * 1000);
+  };
+
   useEffect(() => {
     const video = videoRef.current;
     if (video) {
       setVideoDuration(video.duration);
+
+      // mouse events
+      video.addEventListener("mouseleave", () => {
+        // setIsMouseLeft(true);
+        // showControlsFor(2, () => setIsMouseLeft(false));
+        showControlsFor(2);
+      });
+      video.addEventListener("mousemove", () => {
+        // setIsMouseMoving(true);
+        // showControlsFor(2, () => setIsMouseMoving(false));
+        showControlsFor(2);
+      });
+
+      const listener: (e: KeyboardEvent) => void = (e) => {
+        console.log(e.key);
+        if (e.key === "f") {
+          expandCollapseVideo();
+        } else if ([" ", "k"].includes(e.key)) {
+          console.log("play or pause");
+          togglePlayPause();
+        } else if (["l", "ArrowRight"].includes(e.key)) {
+          video.currentTime += 5;
+        } else if (["j", "ArrowLeft"].includes(e.key)) {
+          video.currentTime -= 5;
+        } else if (e.key === "Escape") {
+          if (isFullScreen) document.exitFullscreen().then(() => {});
+        }
+        showControlsFor(2);
+        setCurrVideoTime(video.currentTime);
+      };
+      document.addEventListener("keyup", listener);
+
+      return () => {
+        document.removeEventListener("keyup", listener);
+      };
     }
-
-    const listener: (e: KeyboardEvent) => void = (e) => {
-      if (e.key === "f") {
-        console.log("Expanding or Collapsing");
-        expandCollapseVideo();
-      } else if (e.key === "k" || e.key === "space") {
-        console.log("play or pause");
-        togglePlayPause();
-      } else if (e.key === "Escape") {
-        if (isFullScreen) document.exitFullscreen().then(() => {});
-      }
-    };
-    document.addEventListener("keyup", listener);
-
-    return () => document.removeEventListener("keyup", listener);
-  }, []);
+  }, [videoRef, expandCollapseVideo]);
 
   useEffect(() => {
     if (isPaused) return;
@@ -91,13 +127,14 @@ const VideoPlayer = () => {
     <div
       className={`${styles.videoContainer} ${
         isFullScreen ? styles.fullScreenVideo : ""
-      }`}
+      } ${!isPaused && !showControls ? styles.hidden : ""}`} // for making the cursor disapper
       ref={contRef}
     >
-      <video className={styles.video} ref={videoRef} autoPlay loop muted>
+      <video className={styles.video} ref={videoRef} muted>
         <source src="/videos/ocean.mp4" type="video/mp4" />
       </video>
       <Controls
+        show={showControls || isPaused}
         isPaused={isPaused}
         isFullScreen={isFullScreen}
         currVideoTime={currVideoTime}

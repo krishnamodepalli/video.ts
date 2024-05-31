@@ -14,9 +14,7 @@ const Timeline = ({
     if (timeline) {
       timeline.style.setProperty("--progress", `${progressPercent}%`)
     }
-  }, [progressPercent]);
-
-  console.log(timelineRef.current?.before);
+  }, [progressPercent, timelineRef]);
 
   return <div className={styles.timeline} ref={timelineRef} ></div>;
 };

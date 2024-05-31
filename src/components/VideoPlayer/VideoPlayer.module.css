@@ -22,16 +22,25 @@
 .videoContainer.fullScreenVideo {
   width: 100%;
   height: 100%;
+  border-radius: 0;
 }
 
+.videoControlsContainer.hidden {
+  visibility: hidden;
+  opacity: 0;
+}
+.videoContainer.hidden {
+  cursor: none;
+}
 .videoControlsContainer {
+  transition: opacity 300ms ease, visibility 300ms ease;
+  z-index: 2;
   position: absolute;
   display: block;
   bottom: 0;
   width: 100%;
   padding: 0.5rem 1rem 1rem;
   color: white;
-  display: none;
 }
 .videoControlsContainer::before {
   z-index: -1;
@@ -41,20 +50,16 @@
   position: absolute;
   bottom: 0;
   left: 0;
-}
-.videoContainer:hover .videoControlsContainer {
-  z-index: 2;
-  display: block;
-}
-.videoContainer:hover .videoControlsContainer::before {
   background: linear-gradient(transparent, #000000a6);
 }
+
 .controls {
   display: flex;
   align-items: center;
 }
 .time {
   display: inline-block;
+  min-width: 4rem;
   max-width: 3rem;
 }
 .controlBtn {
@@ -86,7 +91,7 @@
   position: relative;
   width: 100%;
   height: 3px;
-  background-color: white;
+  background-color: #eeeeeebe;
   margin: 0 15px;
   z-index: 2;
   border-radius: 2px;
@@ -98,7 +103,7 @@
   height: 3px;
   left: 0;
   width: var(--progress, 0%);
-  background-color: red;
+  background-color: #e22121;
   border-radius: 2px;
   transform: all 0.1s ease;
 }
