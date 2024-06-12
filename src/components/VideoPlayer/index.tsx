@@ -8,6 +8,8 @@ import Controls from "../Controls";
 const VideoPlayer = () => {
   const [showControls, setShowControls] = useState<boolean>(false);
   const [isPaused, setIsPaused] = useState<boolean>(true);
+  const [isMute, setIsMute] = useState<boolean>(false);
+  const [volume, setVolume] = useState<number>(70);
   const [videoDuration, setVideoDuration] = useState<number>(0);
   const [currVideoTime, setCurrVideoTime] = useState<number>(0);
 
@@ -15,7 +17,6 @@ const VideoPlayer = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const contRef = useRef<HTMLDivElement | null>(null);
   const showControlsRef = useRef<NodeJS.Timeout>();
-  const fullScreenBtnRef = useRef<HTMLButtonElement | null>(null);
 
   // mouse states
   // const [isMouseLeft, setIsMouseLeft] = useState<boolean>(false);
@@ -42,7 +43,7 @@ const VideoPlayer = () => {
 
   const expandCollapseVideo: () => void = () => {
     const container = contRef.current;
-    console.log(isFullScreen);
+    console.log("expand/collapse ran");
     if (container) {
       if (isFullScreen) {
         console.log(document);
@@ -51,6 +52,29 @@ const VideoPlayer = () => {
       } else {
         container.requestFullscreen().then(() => setIsFullScreen(true));
         console.log("Full Screen entering");
+      }
+    }
+  };
+
+  const updateVolume: (vol: number) => void = (vol: number) => {
+    const video = videoRef.current;
+    if (video) {
+      console.log("input: " + vol);
+      setVolume(vol);
+      video.volume = vol / 100;
+    }
+  };
+
+  const muteUnmute: () => void = () => {
+    const video = videoRef.current;
+    if (video) {
+      if (video.muted) {
+        video.muted = false;
+        setIsMute(false);
+        video.volume = volume / 100;
+      } else {
+        video.muted = true;
+        setIsMute(true);
       }
     }
   };
@@ -70,25 +94,27 @@ const VideoPlayer = () => {
       const time = toPercent * videoDuration;
       video.currentTime = time;
       setCurrVideoTime(time);
+      video.volume = 0.7;
     }
-  }
+    showControlsFor(2);
+  };
 
   useEffect(() => {
     const video = videoRef.current;
     if (video) {
       setVideoDuration(video.duration);
 
+      // mouse event listeners
+      const clickListerner = () => {
+        togglePlayPause();
+        showControlsFor(2);
+      };
+      const mouseLeaveListener = () => showControlsFor(2);
+      const mouseMoveListener = mouseLeaveListener;
       // mouse events
-      video.addEventListener("mouseleave", () => {
-        // setIsMouseLeft(true);
-        // showControlsFor(2, () => setIsMouseLeft(false));
-        showControlsFor(2);
-      });
-      video.addEventListener("mousemove", () => {
-        // setIsMouseMoving(true);
-        // showControlsFor(2, () => setIsMouseMoving(false));
-        showControlsFor(2);
-      });
+      video.addEventListener("mouseleave", mouseLeaveListener);
+      video.addEventListener("mousemove", mouseMoveListener);
+      video.addEventListener("click", clickListerner);
 
       // TODO 1. Add m for mute
       const listener: (e: KeyboardEvent) => void = (e) => {
@@ -99,14 +125,31 @@ const VideoPlayer = () => {
           console.log("play or pause");
           togglePlayPause();
         } else if (["l", "ArrowRight"].includes(e.key)) {
-          video.currentTime += 5;
+          video.currentTime += 10
         } else if (["j", "ArrowLeft"].includes(e.key)) {
-          video.currentTime -= 5;
+          video.currentTime -= 11;
+        } else if (["ArrowUp"].includes(e.key)) {
+          console.log(volume + 5);
+          if (volume < 95)  updateVolume(volume + 5);
+          else  updateVolume(100);
+          console.log("volume :" + volume);
+        } else if (e.key === "ArrowDown") {
+          if (volume > 5)  updateVolume(volume - 5);
+          else  updateVolume(0);
+          console.log("volume :" + volume);
+        } else if (e.key === "m") {
+          muteUnmute();
         } else if (e.key === "Escape") {
-          if (isFullScreen) document.exitFullscreen().then(() => {});
+          // FIXME This is showing some big time error, please fix ASAP
+          console.log("escape ran");
+          e.preventDefault();
+          if (isFullScreen) expandCollapseVideo();
         } else if (e.key >= "0" && e.key <= "9") {
+          // FIXME with `ctrl or `alt do not do this
+          if (e.altKey || e.ctrlKey || e.metaKey) return;
           video.currentTime = (parseInt(e.key) * videoDuration) / 10;
         }
+        // after each of this operation or the keystroke, show the controls for 2 seconds
         showControlsFor(2);
         setCurrVideoTime(video.currentTime);
       };
@@ -114,6 +157,9 @@ const VideoPlayer = () => {
 
       return () => {
         document.removeEventListener("keyup", listener);
+        video.removeEventListener("click", clickListerner);
+        video.removeEventListener("mouseleave", mouseLeaveListener);
+        video.removeEventListener("mousemove", mouseMoveListener);
       };
     }
   }, [videoRef, expandCollapseVideo]);
@@ -125,6 +171,10 @@ const VideoPlayer = () => {
       const currentTime = videoRef.current?.currentTime;
       if (videoDuration != null && currentTime != null) {
         setCurrVideoTime(currentTime);
+        if (currentTime === videoDuration) {
+          // on end of the video
+          setIsPaused(true);
+        }
       }
     };
 
@@ -142,17 +192,21 @@ const VideoPlayer = () => {
       } ${!isPaused && !showControls ? styles.hidden : ""}`} // for making the cursor disapper
       ref={contRef}
     >
-      <video className={styles.video} ref={videoRef} muted>
+      <video className={styles.video} ref={videoRef}>
         <source src="/videos/ocean.mp4" type="video/mp4" />
       </video>
       <Controls
-        seekVideoTo={seekVideoTo}
-        show={showControls || isPaused}
         isPaused={isPaused}
+        isMute={isMute}
+        volumePercent={volume}
         isFullScreen={isFullScreen}
+        show={showControls || isPaused}
         currVideoTime={currVideoTime}
         leftVideoTime={videoDuration - currVideoTime}
+        seekVideoTo={seekVideoTo}
         onPlayPause={togglePlayPause}
+        onMuteUnmute={muteUnmute}
+        updateVolume={updateVolume}
         onFullScreenCollapse={expandCollapseVideo}
       />
     </div>

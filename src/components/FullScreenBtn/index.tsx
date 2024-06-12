@@ -13,7 +13,9 @@ const FullScreenBtn = ({ isFullScreen, onExpandCollapse } : fullScreenProps): JS
       id={styles.fullScreen}
       onClick={() => onExpandCollapse()}
     >
-    <FullScreen />
+    {
+      isFullScreen ? <i className="fa-regular fa-compress-wide"></i> : <i className="fa-regular fa-expand-wide"></i>
+    }
     </button>
   );
 };

@@ -19,8 +19,13 @@ export default function RootLayout({
       <head>
         <script
           src="https://kit.fontawesome.com/19b56ba781.js"
-          crossOrigin="anonymous" async
+          crossOrigin="anonymous"
+          async
         ></script>
+        <link
+          rel="stylesheet"
+          href="https://site-assets.fontawesome.com/releases/v6.5.2/css/all.css"
+        ></link>
       </head>
       <body className={inter.className}>{children}</body>
     </html>

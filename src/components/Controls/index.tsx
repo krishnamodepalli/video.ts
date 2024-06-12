@@ -1,28 +1,36 @@
-import { RefObject } from "react";
-import FullScreenBtn from "../FullScreenBtn";
 import PlayPauseBtn from "../PlayPauseBtn";
+import VolumeControls from "../Volume";
 import Timeline from "../Timeline";
+import FullScreenBtn from "../FullScreenBtn";
 import styles from "../VideoPlayer/VideoPlayer.module.css";
 
 interface controlProps {
-  seekVideoTo: (time: number) => void;
+  isPaused: boolean;
+  isMute: boolean;
+  volumePercent: number;
+  isFullScreen: boolean;
   show: boolean;
   currVideoTime: number;
   leftVideoTime: number; // remianing video time
-  isPaused: boolean;
-  isFullScreen: boolean;
+  seekVideoTo: (time: number) => void;
   onPlayPause: () => void;
+  onMuteUnmute: () => void;
+  updateVolume: (vol: number) => void;
   onFullScreenCollapse: () => void;
 }
 
 const Controls = ({
-  seekVideoTo,
-  show,
   isPaused,
+  isMute,
+  volumePercent,
   isFullScreen,
+  show,
   currVideoTime,
   leftVideoTime,
+  seekVideoTo,
   onPlayPause,
+  onMuteUnmute,
+  updateVolume,
   onFullScreenCollapse,
 }: controlProps): JSX.Element => {
   const formatTime = (time: number): string => {
@@ -52,8 +60,9 @@ const Controls = ({
     {/* // <div className={`${styles.videoControlsContainer} ${}`}> */}
       <div className={styles.controls}>
         <PlayPauseBtn paused={isPaused} onPlayPause={onPlayPause} />
+        <VolumeControls isMute={isMute} volumePercent={volumePercent} onMuteUnmute={onMuteUnmute} updateVolume={updateVolume} />
         <Time time={currVideoTime} />
-        <Timeline seekVideo={seekVideoTo}
+        <Timeline isPaused={isPaused} seekVideo={seekVideoTo}
           progressPercent={
             (currVideoTime / (currVideoTime + leftVideoTime)) * 100
           }
