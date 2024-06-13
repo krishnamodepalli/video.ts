@@ -162,10 +162,10 @@
 }
 .timeline:hover,
 .timelineContainer:hover .timeline {
-  /* height: 6px; */
+  height: 5px;
 }
 .timeline::after {
-  --size: 15px;
+  --size: 25px;
   transition: scale 200ms ease;
   content: "";
   position: absolute;
