@@ -3,6 +3,8 @@
 import React, { useState, useEffect, useRef } from "react";
 
 import styles from "./VideoPlayer.module.css";
+import VisualHelpers from "../VisualHelper/index";
+import { type visualHelperEventType } from "../VisualHelper/index";
 import Controls from "../Controls";
 
 const VideoPlayer = () => {
@@ -13,61 +15,25 @@ const VideoPlayer = () => {
   const [videoDuration, setVideoDuration] = useState<number>(0);
   const [currVideoTime, setCurrVideoTime] = useState<number>(0);
   const [isFullScreen, setIsFullScreen] = useState<boolean>(false);
-  const [showVisualHelper, setShowVisualHelper] = useState<boolean>(false);
 
-  type visualHelperEventType =
-    | "pause"
-    | "play"
-    | "mute"
-    | "volume"
-    | "volume-low"
-    | "volume-high"
-    | "forward"
-    | "backward";
   const [visualHelperEvent, setVisualHelperEvent] =
     useState<visualHelperEventType>("play");
+  const [helperClass, setHelperClass] = useState("");
 
   // refs
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const contRef = useRef<HTMLDivElement | null>(null);
   const showControlsRef = useRef<NodeJS.Timeout>();
-  const visualHelperRef = useRef<HTMLDivElement | null>(null);
 
-  type visualHelperType = {
-    event: visualHelperEventType;
-  };
-  const VisualHelpers = ({ event }: visualHelperType): JSX.Element => {
-    return (
-      <div
-        ref={visualHelperRef}
-        className={`${styles.helper} ${showVisualHelper ? styles.hShow : styles.hHide}`}
-      >
-        {(() => {
-          if (event === "play")
-            return <i className="fa-solid fa-play" id={styles.playHelper}></i>;
-          else if (event === "pause")
-            return <i className="fa-solid fa-pause"></i>;
-          else if (event === "mute")
-            return <i className="fa-solid fa-mute"></i>;
-          else return <></>;
-        })()}
-      </div>
-    );
-  };
-
-  const _showVisualHelper: (helperEvent: visualHelperEventType) => void = (
+  const showVisualHelper: (helperEvent: visualHelperEventType) => void = (
     helperEvent: visualHelperEventType
   ) => {
-    const visualHelper = visualHelperRef.current;
-    if (visualHelper) {
-      setVisualHelperEvent(helperEvent);
-      setTimeout(() => {
-        setShowVisualHelper(true);
-      }, 100);
-      setTimeout(() => {
-        setShowVisualHelper(false);
-      }, 500);
-    }
+    console.log("calling", helperEvent);
+    setVisualHelperEvent(helperEvent);
+    setHelperClass(styles.show);
+    setTimeout(() => {
+      setHelperClass("");
+    }, 300);
   };
 
   const togglePlayPause: () => void = () => {
@@ -75,15 +41,15 @@ const VideoPlayer = () => {
     const video = videoRef.current;
     if (video) {
       if (video.paused) {
+        showVisualHelper("play");
         console.log("playing");
         setIsPaused(false);
         video.play();
-        _showVisualHelper("play");
       } else {
+        showVisualHelper("pause");
         console.log("paused");
         setIsPaused(true);
         video.pause();
-        _showVisualHelper("pause");
       }
     }
   };
@@ -109,6 +75,15 @@ const VideoPlayer = () => {
       console.log("input: " + vol);
       setVolume(vol);
       video.volume = vol / 100;
+      showVisualHelper(
+        vol > 70
+          ? "volume-high"
+          : vol > 30
+          ? "volume"
+          : vol > 0
+          ? "volume-low"
+          : "volume-off"
+      );
     }
   };
 
@@ -119,9 +94,11 @@ const VideoPlayer = () => {
         video.muted = false;
         setIsMute(false);
         video.volume = volume / 100;
+        showVisualHelper("volume");
       } else {
         video.muted = true;
         setIsMute(true);
+        showVisualHelper("mute");
       }
     }
   };
@@ -147,7 +124,6 @@ const VideoPlayer = () => {
   };
 
   useEffect(() => {
-    console.log(visualHelperRef.current?.classList);
     const video = videoRef.current;
     if (video) {
       setVideoDuration(video.duration);
@@ -241,7 +217,7 @@ const VideoPlayer = () => {
       } ${!isPaused && !showControls ? styles.hidden : ""}`} // for making the cursor disapper
       ref={contRef}
     >
-      <VisualHelpers event={visualHelperEvent} />
+      <VisualHelpers event={visualHelperEvent} helperClass={helperClass} volumeLabel={volume} />
       <video className={styles.video} ref={videoRef} muted>
         <source src="/videos/ocean.mp4" type="video/mp4" />
       </video>
