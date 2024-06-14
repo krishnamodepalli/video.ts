@@ -24,6 +24,7 @@ const VideoPlayer = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const contRef = useRef<HTMLDivElement | null>(null);
   const showControlsRef = useRef<NodeJS.Timeout>();
+  const showVisualHelpersRef = useRef<NodeJS.Timeout>();
 
   const showVisualHelper: (helperEvent: visualHelperEventType) => void = (
     helperEvent: visualHelperEventType
@@ -31,9 +32,10 @@ const VideoPlayer = () => {
     console.log("calling", helperEvent);
     setVisualHelperEvent(helperEvent);
     setHelperClass(styles.show);
-    setTimeout(() => {
-      setHelperClass("");
-    }, 300);
+    clearTimeout(showVisualHelpersRef.current);
+    showVisualHelpersRef.current = setTimeout(() => {
+      setHelperClass(styles.hide);
+    }, 10);
   };
 
   const togglePlayPause: () => void = () => {
@@ -217,7 +219,11 @@ const VideoPlayer = () => {
       } ${!isPaused && !showControls ? styles.hidden : ""}`} // for making the cursor disapper
       ref={contRef}
     >
-      <VisualHelpers event={visualHelperEvent} helperClass={helperClass} volumeLabel={volume} />
+      <VisualHelpers
+        event={visualHelperEvent}
+        helperClass={helperClass}
+        volumeLabel={volume}
+      />
       <video className={styles.video} ref={videoRef} muted>
         <source src="/videos/ocean.mp4" type="video/mp4" />
       </video>
