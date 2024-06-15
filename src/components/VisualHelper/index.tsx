@@ -43,11 +43,21 @@ const VisualHelpers = ({
           else if (event === "volume-low")
             return <i className="fa-solid fa-volume-low"></i>;
           else if (event === "volume-off")
-            return <i className="fa-solid fa-volume-off" id={styles.volOffHelper}></i>;
+            return (
+              <i
+                className="fa-solid fa-volume-off"
+                id={styles.volOffHelper}
+              ></i>
+            );
           else return <></>;
         })()}
       </div>
-      <span className={helperClass} id={styles.volLabelHelper}>{volumeLabel}%</span>
+      <span
+        className={event.startsWith("volume") ? helperClass : ""}
+        id={styles.volLabelHelper}
+      >
+        {volumeLabel}%
+      </span>
     </div>
   );
 };
