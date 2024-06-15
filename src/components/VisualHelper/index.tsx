@@ -1,6 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import Mute from "../../../public/images/mute.svg";
+import VolumeHigh from "../../../public/images/volume-high.svg";
+import VolumeLow from "../../../public/images/volume-low.svg";
+import Pause from "../../../public/images/pause.svg";
+import Play from "../../../public/images/play.svg";
 
 import styles from "../VideoPlayer/VideoPlayer.module.css";
 
@@ -9,7 +13,6 @@ type visualHelperEventType =
   | "play"
   | "mute"
   | "volume"
-  | "volume-off"
   | "volume-low"
   | "volume-high"
   | "forward"
@@ -31,24 +34,18 @@ const VisualHelpers = ({
       <div className={`${styles.helper} ${helperClass}`}>
         {(() => {
           if (event === "play")
-            return <i className="fa-solid fa-play" id={styles.playHelper}></i>;
+            return <Play />;
+            // return <i className="fa-solid fa-play" id={styles.playHelper}></i>;
           else if (event === "pause")
-            return <i className="fa-solid fa-pause"></i>;
+            return <Pause />;
           else if (event === "mute")
-            return <i className="fa-solid fa-volume-slash"></i>;
+            return <Mute />;
           else if (event === "volume")
-            return <i className="fa-solid fa-volume"></i>;
+            return <VolumeHigh />;
           else if (event === "volume-high")
-            return <i className="fa-solid fa-volume-high"></i>;
+            return <VolumeHigh />;
           else if (event === "volume-low")
-            return <i className="fa-solid fa-volume-low"></i>;
-          else if (event === "volume-off")
-            return (
-              <i
-                className="fa-solid fa-volume-off"
-                id={styles.volOffHelper}
-              ></i>
-            );
+            return <VolumeLow />;
           else return <></>;
         })()}
       </div>

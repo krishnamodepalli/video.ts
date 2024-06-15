@@ -76,16 +76,10 @@ const VideoPlayer = () => {
     if (video) {
       console.log("input: " + vol);
       setVolume(vol);
+      if (vol > video.volume * 100) showVisualHelper("volume-high");
+      else if (vol === 0) showVisualHelper("mute");
+      else  showVisualHelper("volume-low");
       video.volume = vol / 100;
-      showVisualHelper(
-        vol > 70
-          ? "volume-high"
-          : vol > 30
-          ? "volume"
-          : vol > 0
-          ? "volume-low"
-          : "volume-off"
-      );
     }
   };
 

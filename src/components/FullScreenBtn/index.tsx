@@ -1,5 +1,7 @@
 
-import FullScreen from "../../../public/images/fullscreen.svg";
+import FullScreen from "../../../public/images/full-screen.svg";
+import CollapseScreen from "../../../public/images/collapse-screen.svg"
+
 import styles from "@/components/VideoPlayer/VideoPlayer.module.css";
 
 interface fullScreenProps {
@@ -14,7 +16,7 @@ const FullScreenBtn = ({ isFullScreen, onExpandCollapse } : fullScreenProps): JS
       onClick={() => onExpandCollapse()}
     >
     {
-      isFullScreen ? <i className="fa-regular fa-compress-wide"></i> : <i className="fa-regular fa-expand-wide"></i>
+      isFullScreen ? <CollapseScreen /> : <FullScreen />
     }
     </button>
   );

@@ -1,5 +1,9 @@
-import styles from "@/components/VideoPlayer/VideoPlayer.module.css";
 import { ChangeEvent } from "react";
+
+import Mute from "../../../public/images/mute.svg";
+import VolumeHigh from "../../../public/images/volume-high.svg";
+import VolumeLow from "../../../public/images/volume-low.svg";
+import styles from "@/components/VideoPlayer/VideoPlayer.module.css";
 
 interface volumeProps {
   isMute: boolean;
@@ -21,11 +25,9 @@ const VolumeControls = ({
     isMute: boolean;
     vol: number;
   }): JSX.Element => {
-    if (isMute) return <i className="fa-solid fa-volume-slash"></i>;
-    if (vol === 0) return <i className="fa-solid fa-volume-off"></i>;
-    else if (vol < 30) return <i className="fa-solid fa-volume-low"></i>;
-    else if (vol < 70) return <i className="fa-solid fa-volume"></i>;
-    else return <i className="fa-solid fa-volume-high"></i>;
+    if (isMute || vol === 0) return <Mute />;
+    else if (vol < 50) return <VolumeLow />;
+    else return <VolumeHigh />;
   };
 
   return (
@@ -37,7 +39,7 @@ const VolumeControls = ({
       >
         <Volume isMute={isMute} vol={volumePercent} />
       </button>
-      <div>
+      <div id={styles.volSlider}>
         <input
           type="range"
           name="vol"

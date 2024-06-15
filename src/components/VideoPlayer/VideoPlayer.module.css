@@ -61,7 +61,12 @@
 
 .controls {
   display: flex;
+  height: 3rem;
+  position: relative;
   align-items: center;
+}
+.controls > * {
+  max-height: 3rem;
 }
 .time {
   display: inline-block;
@@ -75,41 +80,35 @@
   user-select: none;
 }
 .controlBtn {
+  display: inline-block;
+  min-height: 3rem;
+  min-width: 3rem;
   cursor: pointer;
   background-color: #0000;
-  fill: #ffffff;
   border: none;
   outline: none;
-  margin: 0 0.7rem;
 }
-.controlBtn i {
-  font-size: 2em;
+.controlBtn svg {
+  fill: #e7e7e7;
+  font-size: 0.8em;
+  transform: scale(0.6);
 }
-#playPauseBtn {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  height: 32px;
-  width: 32px;
-  cursor: pointer;
-}
-#fullScreen {
-  fill: white;
+#playPauseBtn svg {
+  transform: scale(0.8);
 }
 #volume {
-  height: 32px;
-  width: 48px;
-  margin-right: 2.5rem;
+  margin-right: 1rem;
   cursor: default;
   position: relative;
 }
 .volCont {
   position: relative;
+  max-height: 3rem;
 }
-.volCont > div {
+.volCont > div#volSlider {
   position: absolute;
-  bottom: 35px;
-  left: 20px;
+  bottom: 40px;
+  left: 10px;
   width: 30px;
   height: 0;
   transition: all 250ms linear;
@@ -127,10 +126,14 @@
   width: 100px;
   cursor: pointer;
 }
-.volCont:hover > div {
+.volCont:hover > div#volSlider {
   height: 115px;
   border: 1px solid #e3e3e38e;
   opacity: 1;
+}
+#fullScreen > svg {
+  fill: none;
+  transform: scale(0.6);
 }
 
 .timelineContainer {
@@ -208,13 +211,14 @@
   align-items: center;
   z-index: 2;
   font-size: 2rem;
-  color: #ffffff;
 }
-.helper > i#playHelper {
-  width: 1.2rem;
+/* .helper > i#playHelper {
 }
 .helper > i#volOffHelper {
   width: 1.7rem;
+} */
+.helper > svg {
+  fill: #e7e7e7;
 }
 .helper.show {
   opacity: 1;

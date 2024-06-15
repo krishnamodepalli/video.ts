@@ -29,3 +29,13 @@ a {
     color-scheme: dark;
   }
 }
+
+.pause_svg__pauseIcon {
+  width: 42px;
+  height: 42px;
+}
+.play_svg__playIcon {
+  width: 38px;
+  height: 38px;
+  margin-left: 4px;
+}
