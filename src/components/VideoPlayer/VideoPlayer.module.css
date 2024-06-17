@@ -34,7 +34,9 @@
   cursor: none;
 }
 .videoControlsContainer {
-  transition: opacity 300ms ease, visibility 300ms ease;
+  transition:
+    opacity 300ms ease,
+    visibility 300ms ease;
   z-index: 2;
   position: absolute;
   display: block;
@@ -196,6 +198,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  pointer-events: none;
 }
 .helper {
   margin: auto;

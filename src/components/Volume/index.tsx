@@ -3,6 +3,7 @@ import { ChangeEvent } from "react";
 import Mute from "../../../public/images/mute.svg";
 import VolumeHigh from "../../../public/images/volume-high.svg";
 import VolumeLow from "../../../public/images/volume-low.svg";
+
 import styles from "@/components/VideoPlayer/VideoPlayer.module.css";
 
 interface volumeProps {
@@ -35,8 +36,7 @@ const VolumeControls = ({
       <button
         className={styles.controlBtn}
         id={styles.volume}
-        onClick={() => (onMuteUnmute ? onMuteUnmute() : null)}
-      >
+        onClick={() => (onMuteUnmute ? onMuteUnmute() : null)}>
         <Volume isMute={isMute} vol={volumePercent} />
       </button>
       <div id={styles.volSlider}>

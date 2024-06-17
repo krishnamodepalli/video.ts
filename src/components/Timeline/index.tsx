@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+
 import styles from "../VideoPlayer/VideoPlayer.module.css";
 
 interface timelineProps {
@@ -40,9 +41,11 @@ const Timeline = ({
         // move the knob along with the cursor
         // video pause
         const timlineRect = timeline.getBoundingClientRect();
-        const timeToSetPercent =
-          Math.min(Math.max(0, e.x - timlineRect.left) /
-          (timlineRect.right - timlineRect.left), 1);
+        const timeToSetPercent = Math.min(
+          Math.max(0, e.x - timlineRect.left) /
+            (timlineRect.right - timlineRect.left),
+          1
+        );
         seekVideo(timeToSetPercent);
       };
       timeline.addEventListener("mousedown", mouseDownListener);
@@ -59,7 +62,9 @@ const Timeline = ({
 
   return (
     <div className={styles.timelineContainer}>
-      <div className={`${styles.timeline} ${isScrubbing ? styles.scrubbing : ""}`} ref={timelineRef}></div>
+      <div
+        className={`${styles.timeline} ${isScrubbing ? styles.scrubbing : ""}`}
+        ref={timelineRef}></div>
     </div>
   );
 };
