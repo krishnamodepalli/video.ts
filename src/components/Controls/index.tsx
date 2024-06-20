@@ -42,6 +42,9 @@ const Controls = ({
   const [currVideoTime, setCurrVideoTime] = useState<number>(0);
   const [isMute, setIsMute] = useState<boolean>(false);
 
+  /**
+   * This toggles play/pause for the video
+   */
   const togglePlayPause: () => void = () => {
     console.log("play/pause triggered");
     const video = videoRef.current;
@@ -60,6 +63,9 @@ const Controls = ({
     }
   };
 
+  /**
+   * To mute and un-mute the video
+   */
   const toggleMuteUnmute: () => void = () => {
     const video = videoRef.current;
     if (video) {
@@ -76,6 +82,10 @@ const Controls = ({
     }
   };
 
+  /**
+   * This update the volume to the new number
+   * @param vol volume to set
+   */
   const updateVolume: (vol: number) => void = (vol: number) => {
     const video = videoRef.current;
     if (video) {
@@ -88,6 +98,9 @@ const Controls = ({
     }
   };
 
+  /**
+   * This toggles the video expand/collapse.
+   */
   const toggleExpandCollapseVideo: () => void = () => {
     const container = contRef.current;
     console.log("expand/collapse ran");
@@ -103,6 +116,10 @@ const Controls = ({
     }
   };
 
+  /**
+   * seek the video to percent (this is only used for seeking with the scrubber)
+   * @param toPercent percent to which the video to be seeked
+   */
   const seekVideoTo = (toPercent: number): void => {
     const video = videoRef.current;
     if (video) {
@@ -166,7 +183,7 @@ const Controls = ({
           video.currentTime += 10;
         } else if (["j", "ArrowLeft"].includes(e.key)) {
           video.currentTime -= 11;
-        } else if (["ArrowUp"].includes(e.key)) {
+        } else if (e.key === "ArrowUp") {
           console.log(volume + 5);
           if (volume < 95) updateVolume(volume + 5);
           else updateVolume(100);
@@ -183,7 +200,7 @@ const Controls = ({
           e.preventDefault();
           if (isFullScreen) toggleExpandCollapseVideo();
         } else if (e.key >= "0" && e.key <= "9") {
-          // FIXME with `ctrl or `alt do not do this
+          // FIXED: With `ctrl or `alt do not do this
           if (e.altKey || e.ctrlKey || e.metaKey) return;
           video.currentTime = (parseInt(e.key) * videoDuration) / 10;
         }
@@ -191,10 +208,10 @@ const Controls = ({
         showControlsFor(2);
         setCurrVideoTime(video.currentTime);
       };
-      document.addEventListener("keyup", listener);
+      document.addEventListener("keypress", listener);
 
       return () => {
-        document.removeEventListener("keyup", listener);
+        document.removeEventListener("keypress", listener);
         video.removeEventListener("click", clickListerner);
         video.removeEventListener("mouseleave", mouseLeaveListener);
         video.removeEventListener("mousemove", mouseMoveListener);
@@ -205,6 +222,9 @@ const Controls = ({
   useEffect(() => {
     if (isPaused) return;
 
+    /**
+     * This changes the video time for display for every 100ms (0.1s)
+     */
     const updateCurrentTime = () => {
       const currentTime = videoRef.current?.currentTime;
       if (videoDuration != null && currentTime != null) {

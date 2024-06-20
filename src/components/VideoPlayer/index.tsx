@@ -14,6 +14,7 @@ const VideoPlayer = () => {
   const [isFullScreen, setIsFullScreen] = useState<boolean>(false);
   const [showControls, setShowControls] = useState<boolean>(false);
 
+  // VisualHelpers states
   const [visualHelperEvent, setVisualHelperEvent] =
     useState<visualHelperEventType>("play");
   const [helperClass, setHelperClass] = useState("");
@@ -24,16 +25,13 @@ const VideoPlayer = () => {
   const showControlsRef = useRef<NodeJS.Timeout>();
   const showVisualHelpersRef = useRef<NodeJS.Timeout>();
 
-  // This should be definetely placed in this file
-  const showControlsFor = (n: number, callback?: () => void): void => {
-    setShowControls(true);
-    clearTimeout(showControlsRef.current);
-    showControlsRef.current = setTimeout(() => {
-      setShowControls(false);
-      if (callback) callback();
-    }, n * 1000);
-  };
-
+  /**
+   * This will show the visual helper for some time.
+   * 
+   * Only volume controls and play/pause are represented with this
+   * visual helpers.
+   * @param helperEvent The corresponding event to show in Visual Helper
+   */
   const showVisualHelper: (helperEvent: visualHelperEventType) => void = (
     helperEvent: visualHelperEventType
   ) => {
@@ -44,6 +42,20 @@ const VideoPlayer = () => {
     showVisualHelpersRef.current = setTimeout(() => {
       setHelperClass(styles.hide);
     }, 10);
+  };
+
+  /**
+   * To show controls for n seconds
+   * @param n seconds
+   * @param callback Callback to run after showing controls for n seconds
+   */
+  const showControlsFor = (n: number, callback?: () => void): void => {
+    setShowControls(true);
+    clearTimeout(showControlsRef.current);
+    showControlsRef.current = setTimeout(() => {
+      setShowControls(false);
+      if (callback) callback();
+    }, n * 1000);
   };
 
   return (
