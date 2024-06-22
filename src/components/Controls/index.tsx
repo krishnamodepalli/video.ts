@@ -105,14 +105,10 @@ const Controls = ({
     const container = contRef.current;
     console.log("expand/collapse ran");
     if (container) {
-      if (isFullScreen) {
-        console.log(document);
-        document.exitFullscreen().then(() => setIsFullScreen(false));
-        console.log("Full Screen exiting");
-      } else {
-        container.requestFullscreen().then(() => setIsFullScreen(true));
-        console.log("Full Screen entering");
-      }
+      if (document.fullscreenElement)
+        document.exitFullscreen();
+      else
+        container.requestFullscreen();
     }
   };
 
