@@ -167,32 +167,19 @@ const Controls = ({
       video.addEventListener("mousemove", mouseMoveListener);
       video.addEventListener("click", clickListerner);
 
-      // TODO 1. Add m for mute
-      const listener: (e: KeyboardEvent) => void = (e) => {
-        console.log(typeof e.key);
+      const keypressListener: (e: KeyboardEvent) => void = (e) => {
         if (e.key === "f") {
           toggleExpandCollapseVideo();
         } else if ([" ", "k"].includes(e.key)) {
-          console.log("play or pause");
           togglePlayPause();
-        } else if (["l", "ArrowRight"].includes(e.key)) {
+        } else if (e.key === "l") {
           video.currentTime += 10;
-        } else if (["j", "ArrowLeft"].includes(e.key)) {
+        } else if (e.key === "j") {
           video.currentTime -= 11;
-        } else if (e.key === "ArrowUp") {
-          console.log(volume + 5);
-          if (volume < 95) updateVolume(volume + 5);
-          else updateVolume(100);
-          console.log("volume :" + volume);
-        } else if (e.key === "ArrowDown") {
-          if (volume > 5) updateVolume(volume - 5);
-          else updateVolume(0);
-          console.log("volume :" + volume);
         } else if (e.key === "m") {
           toggleMuteUnmute();
         } else if (e.key === "Escape") {
-          // FIXME This is showing some big time error, please fix ASAP
-          console.log("escape ran");
+          // FIXED: This is showing some big time error, please fix ASAP
           e.preventDefault();
           if (isFullScreen) toggleExpandCollapseVideo();
         } else if (e.key >= "0" && e.key <= "9") {
@@ -204,10 +191,27 @@ const Controls = ({
         showControlsFor(2);
         setCurrVideoTime(video.currentTime);
       };
-      document.addEventListener("keypress", listener);
+      document.addEventListener("keypress", keypressListener);
+
+      // The keypress listeners are different from the keydown listeners.
+      const keydownListener: (e: KeyboardEvent) => void = (e: KeyboardEvent) => {
+        if (e.key === "ArrowUp") {
+          if (volume < 95) updateVolume(volume + 5);
+          else updateVolume(100);
+        } else if (e.key === "ArrowDown") {
+          if (volume > 5) updateVolume(volume - 5);
+          else updateVolume(0);
+        } else if (e.key === "ArrowRight") {
+          video.currentTime += 5;
+        } else if (e.key === "ArrowLeft") {
+          video.currentTime -= 5;
+        }
+      }
+      document.addEventListener("keydown", keydownListener);
 
       return () => {
-        document.removeEventListener("keypress", listener);
+        document.removeEventListener("keypress", keypressListener);
+        document.removeEventListener("keydown", keydownListener);
         video.removeEventListener("click", clickListerner);
         video.removeEventListener("mouseleave", mouseLeaveListener);
         video.removeEventListener("mousemove", mouseMoveListener);

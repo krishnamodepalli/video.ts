@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import Hls from "hls.js";
 
 import Controls from "../Controls";
 import VisualHelpers from "../VisualHelper";
@@ -9,6 +10,8 @@ import { visualHelperEventType } from "../../interface/VisualHelper";
 import styles from "./VideoPlayer.module.css";
 
 const VideoPlayer = () => {
+  const videoURI = process.env.NEXT_PUBLIC_STREAM_API_ENDPOINT as string;
+
   const [isPaused, setIsPaused] = useState<boolean>(true);
   const [volume, setVolume] = useState<number>(70);
   const [isFullScreen, setIsFullScreen] = useState<boolean>(false);
@@ -25,9 +28,30 @@ const VideoPlayer = () => {
   const showControlsRef = useRef<NodeJS.Timeout>();
   const showVisualHelpersRef = useRef<NodeJS.Timeout>();
 
+  useEffect(() => {
+    const video = videoRef.current;
+    if (video && Hls.isSupported()) {
+      const hls = new Hls();
+      hls.loadSource(videoURI);
+      hls.attachMedia(video);
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        // video.play();
+      });
+
+      return () => {
+        hls.destroy();
+      };
+    } else if (video && video.canPlayType("application/vnd.apple.mpegurl")) {
+      video.src = videoURI;
+      video.addEventListener("loadedmetadata", () => {
+        // video.play();
+      });
+    }
+  }, []);
+
   /**
    * This will show the visual helper for some time.
-   * 
+   *
    * Only volume controls and play/pause are represented with this
    * visual helpers.
    * @param helperEvent The corresponding event to show in Visual Helper
@@ -65,7 +89,8 @@ const VideoPlayer = () => {
       } ${!isPaused && !showControls ? styles.hidden : ""}`} // for making the cursor disapper
       ref={contRef}>
       <video className={styles.video} ref={videoRef} muted>
-        <source src="/videos/ocean.mp4" type="video/mp4" />
+        {/* <source src="/videos/ocean.mp4" type="video/mp4" /> */}
+        {/* <source src="http://localhost:8000/bird.m3u8" type="application/x-mpegURL"></source> */}
       </video>
       <VisualHelpers
         event={visualHelperEvent}
