@@ -16,5 +16,5 @@ settings.
 
 ## TODO
 
-- [ ] An online demo.
+- [X] An online demo.
 - [ ] Add video references at `src/app/page.tsx` rather than in the component itself
