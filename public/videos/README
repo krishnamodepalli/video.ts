@@ -1,4 +1,0 @@
-
-Please place your video files in here and reference them with links
-like `videos/{video_name}.mp4` from the `@components/VideoPlayer/index.tsx` file
-
