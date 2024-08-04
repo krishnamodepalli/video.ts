@@ -9,7 +9,6 @@ interface timelineProps {
 }
 
 const Timeline = ({
-  isPaused,
   progressPercent,
   seekVideo,
 }: timelineProps): JSX.Element => {
@@ -23,7 +22,6 @@ const Timeline = ({
 
       // listeners
       const mouseDownListener = (e: MouseEvent) => {
-        console.log("scrubbing");
         setIsScrubbing(true);
         const timelineRect = timeline.getBoundingClientRect();
         const timeToSetPercent =
@@ -31,8 +29,7 @@ const Timeline = ({
           (timelineRect.right - timelineRect.left);
         seekVideo(timeToSetPercent);
       };
-      const mouseUpListener = (e: MouseEvent) => {
-        console.log("not scrubbing");
+      const mouseUpListener = () => {
         setIsScrubbing(false);
       };
       const mouseMoveListener = (e: MouseEvent) => {
@@ -62,6 +59,7 @@ const Timeline = ({
 
   return (
     <div className={styles.timelineContainer}>
+    {/* TODO: Add new feature for indicating the loaded content with streaming. */}
       <div
         className={`${styles.timeline} ${isScrubbing ? styles.scrubbing : ""}`}
         ref={timelineRef}></div>
