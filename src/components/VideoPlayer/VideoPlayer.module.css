@@ -154,7 +154,7 @@
   z-index: 2;
   border-radius: 5px;
   cursor: pointer;
-  box-shadow: 1px 1px 5px #b8b8b8cb;
+  /* box-shadow: 1px 1px 5px #b8b8b8cb; */
 }
 .timeline::before {
   content: "";
