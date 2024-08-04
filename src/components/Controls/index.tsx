@@ -105,10 +105,8 @@ const Controls = ({
     const container = contRef.current;
     console.log("expand/collapse ran");
     if (container) {
-      if (document.fullscreenElement)
-        document.exitFullscreen();
-      else
-        container.requestFullscreen();
+      if (document.fullscreenElement) document.exitFullscreen();
+      else container.requestFullscreen();
     }
   };
 
@@ -194,7 +192,9 @@ const Controls = ({
       document.addEventListener("keypress", keypressListener);
 
       // The keypress listeners are different from the keydown listeners.
-      const keydownListener: (e: KeyboardEvent) => void = (e: KeyboardEvent) => {
+      const keydownListener: (e: KeyboardEvent) => void = (
+        e: KeyboardEvent
+      ) => {
         if (e.key === "ArrowUp") {
           if (volume < 95) updateVolume(volume + 5);
           else updateVolume(100);
@@ -206,7 +206,7 @@ const Controls = ({
         } else if (e.key === "ArrowLeft") {
           video.currentTime -= 5;
         }
-      }
+      };
       document.addEventListener("keydown", keydownListener);
 
       return () => {
