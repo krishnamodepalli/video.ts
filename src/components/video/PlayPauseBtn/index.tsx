@@ -1,9 +1,9 @@
 import React from "react";
 
-import Play from "../../../public/images/play.svg";
-import Pause from "../../../public/images/pause.svg";
+import Play from "/public/images/play.svg";
+import Pause from "/public/images/pause.svg";
 
-import styles from "@/components/VideoPlayer/VideoPlayer.module.css";
+import styles from "@/components/video/video.module.css";
 
 type playPauseProps = {
   paused: boolean;

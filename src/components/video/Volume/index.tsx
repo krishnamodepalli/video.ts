@@ -1,10 +1,10 @@
 import { ChangeEvent } from "react";
 
-import Mute from "../../../public/images/mute.svg";
-import VolumeHigh from "../../../public/images/volume-high.svg";
-import VolumeLow from "../../../public/images/volume-low.svg";
+import Mute from "/public/images/mute.svg";
+import VolumeHigh from "/public/images/volume-high.svg";
+import VolumeLow from "/public/images/volume-low.svg";
 
-import styles from "@/components/VideoPlayer/VideoPlayer.module.css";
+import styles from "@/components/video/video.module.css";
 
 interface volumeProps {
   isMute: boolean;

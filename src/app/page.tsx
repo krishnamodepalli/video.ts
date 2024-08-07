@@ -1,5 +1,4 @@
-import styles from "./page.module.css";
-import VideoPlayer from "@/components/VideoPlayer/index";
+import VideoPlayer from "@/components/video/VideoPlayer";
 
 export default function Home() {
   return <VideoPlayer />;

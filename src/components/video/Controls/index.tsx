@@ -9,7 +9,7 @@ import FullScreenBtn from "../FullScreenBtn";
 
 import { visualHelperEventType } from "@/interface/VisualHelper";
 
-import styles from "../VideoPlayer/VideoPlayer.module.css";
+import styles from "./styles.module.css";
 
 interface controlProps {
   videoRef: React.MutableRefObject<HTMLVideoElement | null>;
@@ -34,7 +34,6 @@ const Controls = ({
   show,
   setIsPaused,
   setVolume,
-  setIsFullScreen,
   showControlsFor,
   showVisualHelper,
 }: controlProps): JSX.Element => {
@@ -147,6 +146,9 @@ const Controls = ({
     <div className={styles.time}>{formatTime(Math.round(time))}</div>
   );
 
+  /**
+   * set custom keybindings and mouse interaction events for better user-experience.
+   */
   useEffect(() => {
     const video = videoRef.current;
     if (video) {

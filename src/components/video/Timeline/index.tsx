@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import styles from "../VideoPlayer/VideoPlayer.module.css";
+import styles from "./styles.module.css";
 
 interface timelineProps {
   isPaused: boolean;
@@ -22,6 +22,7 @@ const Timeline = ({
 
       // listeners
       const mouseDownListener = (e: MouseEvent) => {
+        console.log("scrubbing");
         setIsScrubbing(true);
         const timelineRect = timeline.getBoundingClientRect();
         const timeToSetPercent =
@@ -30,6 +31,7 @@ const Timeline = ({
         seekVideo(timeToSetPercent);
       };
       const mouseUpListener = () => {
+        console.log("not scrubbing");
         setIsScrubbing(false);
       };
       const mouseMoveListener = (e: MouseEvent) => {

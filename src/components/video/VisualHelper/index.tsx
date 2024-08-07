@@ -1,14 +1,12 @@
-"use client";
-
-import Mute from "../../../public/images/mute.svg";
-import VolumeHigh from "../../../public/images/volume-high.svg";
-import VolumeLow from "../../../public/images/volume-low.svg";
-import Pause from "../../../public/images/pause.svg";
-import Play from "../../../public/images/play.svg";
+import Mute from "/public/images/mute.svg";
+import VolumeHigh from "/public/images/volume-high.svg";
+import VolumeLow from "/public/images/volume-low.svg";
+import Pause from "/public/images/pause.svg";
+import Play from "/public/images/play.svg";
 
 import visualHelperType from "@/interface/VisualHelper";
 
-import styles from "../VideoPlayer/VideoPlayer.module.css";
+import styles from "./styles.module.css";
 
 const VisualHelpers = ({
   event,
