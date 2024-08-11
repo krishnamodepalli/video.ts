@@ -1,14 +1,12 @@
-"use client";
-
-import Mute from "../../../public/images/mute.svg";
-import VolumeHigh from "../../../public/images/volume-high.svg";
-import VolumeLow from "../../../public/images/volume-low.svg";
-import Pause from "../../../public/images/pause.svg";
-import Play from "../../../public/images/play.svg";
+import Mute from "/public/images/mute.svg";
+import VolumeHigh from "/public/images/volume-high.svg";
+import VolumeLow from "/public/images/volume-low.svg";
+import Pause from "/public/images/pause.svg";
+import Play from "/public/images/play.svg";
 
 import visualHelperType from "@/interface/VisualHelper";
 
-import styles from "../VideoPlayer/VideoPlayer.module.css";
+import LStyles from "./styles.module.css";        // local styles
 
 const VisualHelpers = ({
   event,
@@ -16,11 +14,11 @@ const VisualHelpers = ({
   volumeLabel,
 }: visualHelperType): JSX.Element => {
   return (
-    <div className={styles.helperCont}>
-      <div className={`${styles.helper} ${helperClass}`}>
+    <div className={LStyles.helperCont}>
+      <div className={`${LStyles.helper} ${helperClass}`}>
         {(() => {
           if (event === "play") return <Play />;
-          // return <i className="fa-solid fa-play" id={styles.playHelper}></i>;
+          // return <i className="fa-solid fa-play" id={LStyles.playHelper}></i>;
           else if (event === "pause") return <Pause />;
           else if (event === "mute") return <Mute />;
           else if (event === "volume") return <VolumeHigh />;
@@ -31,7 +29,7 @@ const VisualHelpers = ({
       </div>
       <span
         className={event.startsWith("volume") ? helperClass : ""}
-        id={styles.volLabelHelper}>
+        id={LStyles.volLabelHelper}>
         {volumeLabel}%
       </span>
     </div>

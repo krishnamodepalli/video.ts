@@ -5,9 +5,10 @@ import Hls from "hls.js";
 
 import Controls from "../Controls";
 import VisualHelpers from "../VisualHelper";
-import { visualHelperEventType } from "../../interface/VisualHelper";
+import { visualHelperEventType } from "../../../interface/VisualHelper";
 
-import styles from "./VideoPlayer.module.css";
+import styles from "../video.module.css";
+import helperStyles from "../VisualHelper/styles.module.css";
 
 const VideoPlayer = () => {
   const videoURI = process.env.NEXT_PUBLIC_STREAM_API_ENDPOINT as string;
@@ -61,10 +62,10 @@ const VideoPlayer = () => {
   ) => {
     console.log("calling", helperEvent);
     setVisualHelperEvent(helperEvent);
-    setHelperClass(styles.show);
+    setHelperClass(helperStyles.show);
     clearTimeout(showVisualHelpersRef.current);
     showVisualHelpersRef.current = setTimeout(() => {
-      setHelperClass(styles.hide);
+      setHelperClass(helperStyles.hide);
     }, 10);
   };
 
@@ -74,6 +75,7 @@ const VideoPlayer = () => {
    * @param callback Callback to run after showing controls for n seconds
    */
   const showControlsFor = (n: number, callback?: () => void): void => {
+    console.log("logging");
     setShowControls(true);
     clearTimeout(showControlsRef.current);
     showControlsRef.current = setTimeout(() => {

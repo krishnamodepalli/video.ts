@@ -9,7 +9,7 @@ import FullScreenBtn from "../FullScreenBtn";
 
 import { visualHelperEventType } from "@/interface/VisualHelper";
 
-import styles from "../VideoPlayer/VideoPlayer.module.css";
+import LStyles from "./styles.module.css";      // local styles
 
 interface controlProps {
   videoRef: React.MutableRefObject<HTMLVideoElement | null>;
@@ -34,7 +34,6 @@ const Controls = ({
   show,
   setIsPaused,
   setVolume,
-  setIsFullScreen,
   showControlsFor,
   showVisualHelper,
 }: controlProps): JSX.Element => {
@@ -144,9 +143,12 @@ const Controls = ({
   };
 
   const Time = ({ time }: { time: number }): JSX.Element => (
-    <div className={styles.time}>{formatTime(Math.round(time))}</div>
+    <div className={LStyles.time}>{formatTime(Math.round(time))}</div>
   );
 
+  /**
+   * set custom keybindings and mouse interaction events for better user-experience.
+   */
   useEffect(() => {
     const video = videoRef.current;
     if (video) {
@@ -245,9 +247,9 @@ const Controls = ({
 
   return (
     <div
-      className={`${styles.videoControlsContainer} ${show ? "" : styles.hidden}`}>
-      {/* // <div className={`${styles.videoControlsContainer} ${}`}> */}
-      <div className={styles.controls}>
+      className={`${LStyles.videoControlsContainer} ${show ? "" : LStyles.hidden}`}>
+      {/* // <div className={`${LStyles.videoControlsContainer} ${}`}> */}
+      <div className={LStyles.controls}>
         <PlayPauseBtn paused={isPaused} onPlayPause={togglePlayPause} />
         <VolumeControls
           isMute={isMute}

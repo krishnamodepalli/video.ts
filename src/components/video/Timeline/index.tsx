@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import styles from "../VideoPlayer/VideoPlayer.module.css";
+import LStyles from "./styles.module.css";
 
 interface timelineProps {
   isPaused: boolean;
@@ -22,6 +22,7 @@ const Timeline = ({
 
       // listeners
       const mouseDownListener = (e: MouseEvent) => {
+        console.log("scrubbing");
         setIsScrubbing(true);
         const timelineRect = timeline.getBoundingClientRect();
         const timeToSetPercent =
@@ -30,6 +31,7 @@ const Timeline = ({
         seekVideo(timeToSetPercent);
       };
       const mouseUpListener = () => {
+        console.log("not scrubbing");
         setIsScrubbing(false);
       };
       const mouseMoveListener = (e: MouseEvent) => {
@@ -58,10 +60,10 @@ const Timeline = ({
   }, [seekVideo, progressPercent, timelineRef]);
 
   return (
-    <div className={styles.timelineContainer}>
+    <div className={LStyles.timelineContainer}>
     {/* TODO: Add new feature for indicating the loaded content with streaming. */}
       <div
-        className={`${styles.timeline} ${isScrubbing ? styles.scrubbing : ""}`}
+        className={`${LStyles.timeline} ${isScrubbing ? LStyles.scrubbing : ""}`}
         ref={timelineRef}></div>
     </div>
   );

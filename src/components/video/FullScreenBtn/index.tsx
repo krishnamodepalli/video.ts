@@ -1,7 +1,7 @@
-import FullScreen from "../../../public/images/full-screen.svg";
-import CollapseScreen from "../../../public/images/collapse-screen.svg";
+import FullScreen from "/public/images/full-screen.svg";
+import CollapseScreen from "/public/images/collapse-screen.svg";
 
-import styles from "@/components/VideoPlayer/VideoPlayer.module.css";
+import globalStyles from "@/components/video/video.module.css";
 
 interface fullScreenProps {
   isFullScreen: boolean;
@@ -13,8 +13,8 @@ const FullScreenBtn = ({
 }: fullScreenProps): JSX.Element => {
   return (
     <button
-      className={styles.controlBtn}
-      id={styles.fullScreen}
+      className={globalStyles.controlBtn}
+      id={globalStyles.fullScreen}
       onClick={() => onExpandCollapse()}>
       {isFullScreen ? <CollapseScreen /> : <FullScreen />}
     </button>

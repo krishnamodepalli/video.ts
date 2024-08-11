@@ -1,10 +1,11 @@
 import { ChangeEvent } from "react";
 
-import Mute from "../../../public/images/mute.svg";
-import VolumeHigh from "../../../public/images/volume-high.svg";
-import VolumeLow from "../../../public/images/volume-low.svg";
+import Mute from "/public/images/mute.svg";
+import VolumeHigh from "/public/images/volume-high.svg";
+import VolumeLow from "/public/images/volume-low.svg";
 
-import styles from "@/components/VideoPlayer/VideoPlayer.module.css";
+import GStyles from "../video.module.css";      // global styles
+import LStyles from "./styles.module.css";      // local styles
 
 interface volumeProps {
   isMute: boolean;
@@ -32,18 +33,18 @@ const VolumeControls = ({
   };
 
   return (
-    <div className={styles.volCont}>
+    <div className={LStyles.volCont}>
       <button
-        className={styles.controlBtn}
-        id={styles.volume}
+        className={GStyles.controlBtn}
+        id={LStyles.volume}
         onClick={() => (onMuteUnmute ? onMuteUnmute() : null)}>
         <Volume isMute={isMute} vol={volumePercent} />
       </button>
-      <div id={styles.volSlider}>
+      <div id={LStyles.volSlider}>
         <input
           type="range"
           name="vol"
-          id={styles.volRange}
+          id={LStyles.volRange}
           value={volumePercent}
           min={0}
           max={100}
