@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import styles from "./styles.module.css";
+import LStyles from "./styles.module.css";
 
 interface timelineProps {
   isPaused: boolean;
@@ -60,10 +60,10 @@ const Timeline = ({
   }, [seekVideo, progressPercent, timelineRef]);
 
   return (
-    <div className={styles.timelineContainer}>
+    <div className={LStyles.timelineContainer}>
     {/* TODO: Add new feature for indicating the loaded content with streaming. */}
       <div
-        className={`${styles.timeline} ${isScrubbing ? styles.scrubbing : ""}`}
+        className={`${LStyles.timeline} ${isScrubbing ? LStyles.scrubbing : ""}`}
         ref={timelineRef}></div>
     </div>
   );
