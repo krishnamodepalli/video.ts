@@ -44,8 +44,5 @@ next-env.d.ts
 .vscode/
 *.code-workspace
 
-# video files
-**/*.mp4
-
 # old files
 **/*.old

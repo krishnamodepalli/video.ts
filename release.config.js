@@ -5,7 +5,7 @@ module.exports = {
   "release": {
     "branches": [ "master" ],
     "repositoryUrl": "https://github.com/krishnamodepalli/video.ts",
-    "plugings": [
+    "plugins": [
       "@semantic-release/commit-analyser",
       "@semantic-release/release-notes-generator",
       "@semantic-release/changelog",
