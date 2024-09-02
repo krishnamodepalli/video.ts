@@ -25,6 +25,7 @@ const VideoPlayer = () => {
 
   // refs
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const hlsRef = useRef<Hls | null>(null);
   const contRef = useRef<HTMLDivElement | null>(null);
   const showControlsRef = useRef<NodeJS.Timeout>();
   const showVisualHelpersRef = useRef<NodeJS.Timeout>();
@@ -35,6 +36,7 @@ const VideoPlayer = () => {
       const hls = new Hls();
       hls.loadSource(videoURI);
       hls.attachMedia(video);
+      hlsRef.current = hls;
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
         // video.play();
       });
@@ -101,6 +103,7 @@ const VideoPlayer = () => {
       />
       <Controls
         videoRef={videoRef}
+        hlsRef={hlsRef}
         contRef={contRef}
         isPaused={isPaused}
         volume={volume}

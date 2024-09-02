@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Hls, { Events, FragLoadedData } from "hls.js";
 
 import PlayPauseBtn from "../PlayPauseBtn";
 import VolumeControls from "../Volume";
@@ -13,6 +14,7 @@ import LStyles from "./styles.module.css";      // local styles
 
 interface controlProps {
   videoRef: React.MutableRefObject<HTMLVideoElement | null>;
+  hlsRef: React.MutableRefObject<Hls | null>;
   contRef: React.MutableRefObject<HTMLDivElement | null>;
   isPaused: boolean;
   volume: number;
@@ -27,6 +29,7 @@ interface controlProps {
 
 const Controls = ({
   videoRef,
+  hlsRef,
   contRef,
   isPaused,
   volume,
@@ -39,6 +42,7 @@ const Controls = ({
 }: controlProps): JSX.Element => {
   const [videoDuration, setVideoDuration] = useState<number>(0);
   const [currVideoTime, setCurrVideoTime] = useState<number>(0);
+  const [loadedDuration, setLoadedDuration] = useState<number>(0);
   const [isMute, setIsMute] = useState<boolean>(false);
 
   /**
@@ -155,6 +159,10 @@ const Controls = ({
       setVideoDuration(video.duration);
       if (video.muted) setIsMute(true);
 
+      const onFragLoad = (event: Events.FRAG_LOADED, data: FragLoadedData) => {
+        setLoadedDuration(data.frag.start + data.frag.duration);
+      };
+
       // mouse event listeners
       const clickListerner = () => {
         togglePlayPause();
@@ -211,12 +219,21 @@ const Controls = ({
       };
       document.addEventListener("keydown", keydownListener);
 
+      const hls = hlsRef.current;
+      if (hls) {
+        hls.on(Hls.Events.FRAG_LOADED, onFragLoad);
+      }
+
       return () => {
         document.removeEventListener("keypress", keypressListener);
         document.removeEventListener("keydown", keydownListener);
         video.removeEventListener("click", clickListerner);
         video.removeEventListener("mouseleave", mouseLeaveListener);
         video.removeEventListener("mousemove", mouseMoveListener);
+
+        if (hls) {
+          hls.off(Hls.Events.FRAG_LOADED, onFragLoad);
+        }
       };
     }
   }, [videoRef, toggleExpandCollapseVideo]);
@@ -259,9 +276,9 @@ const Controls = ({
         />
         <Time time={currVideoTime} />
         <Timeline
-          isPaused={isPaused}
-          seekVideo={seekVideoTo}
           progressPercent={(currVideoTime / videoDuration) * 100}
+          loadedPercent={(loadedDuration / videoDuration) * 100}
+          seekVideo={seekVideoTo}
         />
         <Time time={videoDuration - currVideoTime} />
         <FullScreenBtn

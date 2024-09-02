@@ -3,13 +3,14 @@ import React, { useEffect, useState } from "react";
 import LStyles from "./styles.module.css";
 
 interface timelineProps {
-  isPaused: boolean;
   progressPercent: number;
+  loadedPercent: number;
   seekVideo: (time: number) => void;
 }
 
 const Timeline = ({
   progressPercent,
+  loadedPercent,
   seekVideo,
 }: timelineProps): JSX.Element => {
   const [isScrubbing, setIsScrubbing] = useState<boolean>(false);
@@ -19,6 +20,7 @@ const Timeline = ({
     const timeline = timelineRef.current;
     if (timeline) {
       timeline.style.setProperty("--progress", `${progressPercent}%`);
+      timeline.style.setProperty("--loaded", `${loadedPercent}%`);
 
       // listeners
       const mouseDownListener = (e: MouseEvent) => {
