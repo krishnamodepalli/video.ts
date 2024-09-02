@@ -25,6 +25,7 @@ const VideoPlayer = () => {
 
   // refs
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const hlsRef = useRef<Hls | null>(null);
   const contRef = useRef<HTMLDivElement | null>(null);
   const showControlsRef = useRef<NodeJS.Timeout>();
   const showVisualHelpersRef = useRef<NodeJS.Timeout>();
@@ -35,6 +36,7 @@ const VideoPlayer = () => {
       const hls = new Hls();
       hls.loadSource(videoURI);
       hls.attachMedia(video);
+      hlsRef.current = hls;
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
         // video.play();
       });
@@ -48,7 +50,7 @@ const VideoPlayer = () => {
         // video.play();
       });
     }
-  }, []);
+  }, [videoURI]);
 
   /**
    * This will show the visual helper for some time.
@@ -75,7 +77,6 @@ const VideoPlayer = () => {
    * @param callback Callback to run after showing controls for n seconds
    */
   const showControlsFor = (n: number, callback?: () => void): void => {
-    console.log("logging");
     setShowControls(true);
     clearTimeout(showControlsRef.current);
     showControlsRef.current = setTimeout(() => {
@@ -101,6 +102,7 @@ const VideoPlayer = () => {
       />
       <Controls
         videoRef={videoRef}
+        hlsRef={hlsRef}
         contRef={contRef}
         isPaused={isPaused}
         volume={volume}

@@ -3,13 +3,14 @@ import React, { useEffect, useState } from "react";
 import LStyles from "./styles.module.css";
 
 interface timelineProps {
-  isPaused: boolean;
   progressPercent: number;
+  loadedPercent: number;
   seekVideo: (time: number) => void;
 }
 
-const Timeline = ({
+const Timeline: React.FC<timelineProps> = ({
   progressPercent,
+  loadedPercent,
   seekVideo,
 }: timelineProps): JSX.Element => {
   const [isScrubbing, setIsScrubbing] = useState<boolean>(false);
@@ -19,6 +20,7 @@ const Timeline = ({
     const timeline = timelineRef.current;
     if (timeline) {
       timeline.style.setProperty("--progress", `${progressPercent}%`);
+      timeline.style.setProperty("--loaded", `${loadedPercent}%`);
 
       // listeners
       const mouseDownListener = (e: MouseEvent) => {
@@ -57,14 +59,16 @@ const Timeline = ({
         document.removeEventListener("mouseup", mouseUpListener);
       };
     }
-  }, [seekVideo, progressPercent, timelineRef]);
+  }, [isScrubbing, progressPercent, loadedPercent, timelineRef, seekVideo]);
 
   return (
     <div className={LStyles.timelineContainer}>
-    {/* TODO: Add new feature for indicating the loaded content with streaming. */}
+      {/* TODO: Add new feature for indicating the loaded content with streaming. */}
       <div
         className={`${LStyles.timeline} ${isScrubbing ? LStyles.scrubbing : ""}`}
-        ref={timelineRef}></div>
+        ref={timelineRef}>
+        <span id={`${LStyles.knob}`}></span>
+      </div>
     </div>
   );
 };
