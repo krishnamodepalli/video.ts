@@ -64,7 +64,9 @@ const Timeline = ({
     {/* TODO: Add new feature for indicating the loaded content with streaming. */}
       <div
         className={`${LStyles.timeline} ${isScrubbing ? LStyles.scrubbing : ""}`}
-        ref={timelineRef}></div>
+        ref={timelineRef}>
+        <span id={`${LStyles.knob}`}></span>
+      </div>
     </div>
   );
 };

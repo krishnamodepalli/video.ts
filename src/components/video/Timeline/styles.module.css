@@ -28,13 +28,15 @@
   border-radius: 5px;
   transition: height 200ms linear;
 }
+
 /* On hover, show bigger timeline */
 .timeline:hover,
 .timelineContainer:hover .timeline {
   height: 5px;
 }
+
 /* The knob */
-.timeline::after {
+#knob {
   --size: 25px;
   transition: scale 200ms ease;
   content: "";
@@ -47,8 +49,9 @@
   scale: 0;
   border-radius: 50%;
   background-color: #e22121;
+  z-index: 4;
 }
-.timelineContainer:hover .timeline::after,
-.scrubbing.timeline::after {
+.timelineContainer:hover #knob,
+.scrubbing > #knob {
   scale: 1;
 }
