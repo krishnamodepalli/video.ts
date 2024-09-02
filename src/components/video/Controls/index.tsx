@@ -174,7 +174,7 @@ const Controls = ({
       };
 
       // mouse event listeners
-      const clickListerner = () => {
+      const clickListener = () => {
         togglePlayPause();
         showControlsFor(2);
       };
