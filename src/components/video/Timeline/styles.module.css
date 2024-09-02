@@ -12,11 +12,9 @@
   position: relative;
   width: 100%;
   height: 3px;
-  background-color: #eeeeee6e;
+  background-color: #bbbbbb60;
   z-index: 2;
-  border-radius: 5px;
   cursor: pointer;
-  /* box-shadow: 1px 1px 5px #b8b8b8cb; */
 }
 
 /* This is for showing the completed time for the video. */

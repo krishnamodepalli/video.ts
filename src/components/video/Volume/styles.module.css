@@ -1,5 +1,4 @@
 #volume {
-  margin-right: 1rem;
   cursor: default;
   position: relative;
 }
@@ -23,7 +22,7 @@
   position: absolute;
   transform: rotate(-90deg);
   transform-origin: left;
-  bottom: 0px;
+  bottom: 0;
   left: 50%;
   width: 100px;
   cursor: pointer;

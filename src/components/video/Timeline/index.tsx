@@ -8,7 +8,7 @@ interface timelineProps {
   seekVideo: (time: number) => void;
 }
 
-const Timeline = ({
+const Timeline: React.FC<timelineProps> = ({
   progressPercent,
   loadedPercent,
   seekVideo,
@@ -59,11 +59,11 @@ const Timeline = ({
         document.removeEventListener("mouseup", mouseUpListener);
       };
     }
-  }, [seekVideo, progressPercent, timelineRef]);
+  }, [isScrubbing, progressPercent, loadedPercent, timelineRef, seekVideo]);
 
   return (
     <div className={LStyles.timelineContainer}>
-    {/* TODO: Add new feature for indicating the loaded content with streaming. */}
+      {/* TODO: Add new feature for indicating the loaded content with streaming. */}
       <div
         className={`${LStyles.timeline} ${isScrubbing ? LStyles.scrubbing : ""}`}
         ref={timelineRef}>

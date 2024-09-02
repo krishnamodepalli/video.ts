@@ -50,7 +50,7 @@ const VideoPlayer = () => {
         // video.play();
       });
     }
-  }, []);
+  }, [videoURI]);
 
   /**
    * This will show the visual helper for some time.
@@ -77,7 +77,6 @@ const VideoPlayer = () => {
    * @param callback Callback to run after showing controls for n seconds
    */
   const showControlsFor = (n: number, callback?: () => void): void => {
-    console.log("logging");
     setShowControls(true);
     clearTimeout(showControlsRef.current);
     showControlsRef.current = setTimeout(() => {

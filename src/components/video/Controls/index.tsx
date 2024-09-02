@@ -10,7 +10,7 @@ import FullScreenBtn from "../FullScreenBtn";
 
 import { visualHelperEventType } from "@/interface/VisualHelper";
 
-import LStyles from "./styles.module.css";      // local styles
+import LStyles from "./styles.module.css"; // local styles
 
 interface controlProps {
   videoRef: React.MutableRefObject<HTMLVideoElement | null>;
@@ -146,8 +146,18 @@ const Controls = ({
       .padStart(2, "0")}`;
   };
 
-  const Time = ({ time }: { time: number }): JSX.Element => (
-    <div className={LStyles.time}>{formatTime(Math.round(time))}</div>
+  const Time = ({
+    time,
+    id,
+    className,
+  }: {
+    time: number;
+    id?: string;
+    className?: string;
+  }): JSX.Element => (
+    <div id={`${id}`} className={`${LStyles.time} ${className}`}>
+      {formatTime(Math.round(time))}
+    </div>
   );
 
   /**
@@ -236,7 +246,7 @@ const Controls = ({
         }
       };
     }
-  }, [videoRef, toggleExpandCollapseVideo]);
+  }, [videoRef, setIsPaused, toggleExpandCollapseVideo]);
 
   useEffect(() => {
     if (isPaused) return;
@@ -260,7 +270,7 @@ const Controls = ({
     return () => {
       clearInterval(intervalId);
     };
-  }, [currVideoTime, videoDuration, isPaused]);
+  }, [currVideoTime, videoDuration, isPaused, videoRef, setIsPaused]);
 
   return (
     <div
@@ -274,13 +284,13 @@ const Controls = ({
           onMuteUnmute={toggleMuteUnmute}
           updateVolume={updateVolume}
         />
-        <Time time={currVideoTime} />
+        <Time id={LStyles.startTime} time={currVideoTime} />
         <Timeline
           progressPercent={(currVideoTime / videoDuration) * 100}
           loadedPercent={(loadedDuration / videoDuration) * 100}
           seekVideo={seekVideoTo}
         />
-        <Time time={videoDuration - currVideoTime} />
+        <Time id={LStyles.endTime} time={videoDuration - currVideoTime} />
         <FullScreenBtn
           isFullScreen={isFullScreen}
           onExpandCollapse={toggleExpandCollapseVideo}
