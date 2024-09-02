@@ -183,7 +183,7 @@ const Controls = ({
       // mouse events
       video.addEventListener("mouseleave", mouseLeaveListener);
       video.addEventListener("mousemove", mouseMoveListener);
-      video.addEventListener("click", clickListerner);
+      video.addEventListener("click", clickListener);
 
       const keypressListener: (e: KeyboardEvent) => void = (e) => {
         if (e.key === "f") {
@@ -226,6 +226,7 @@ const Controls = ({
         } else if (e.key === "ArrowLeft") {
           video.currentTime -= 5;
         }
+        setCurrVideoTime(video.currentTime);
       };
       document.addEventListener("keydown", keydownListener);
 
@@ -237,7 +238,7 @@ const Controls = ({
       return () => {
         document.removeEventListener("keypress", keypressListener);
         document.removeEventListener("keydown", keydownListener);
-        video.removeEventListener("click", clickListerner);
+        video.removeEventListener("click", clickListener);
         video.removeEventListener("mouseleave", mouseLeaveListener);
         video.removeEventListener("mousemove", mouseMoveListener);
 
